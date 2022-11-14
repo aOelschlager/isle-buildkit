@@ -102,6 +102,10 @@ function main {
         tar -xzf ${FILE} -C ${install_directory} --strip-components ${DEPTH}
         chown -R ${NAME}:${NAME} ${install_directory}
         ;;
+    *.jar)
+        cp ${FILE} ${install_directory}
+        chown -R ${NAME}:${NAME} ${install_directory}
+        ;;
     *)
         echo "Unable to unpack ${FILE} please update script to support additional formats." >&2
         exit 1

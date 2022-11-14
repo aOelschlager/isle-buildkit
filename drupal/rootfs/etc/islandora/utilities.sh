@@ -429,15 +429,17 @@ function configure_islandora_module {
 
 # After enabling and importing features a number of configurations need to be updated.
 function configure_islandora_default_module {
-    if ! drush pm-list --pipe --type=module --status=enabled --no-core | grep -q islandora_defaults; then
-        echo "islandora_defaults is not installed.  Skipping configuration"
-        return 0
-    fi
-
     local site="${1}"; shift
     local site_url=$(drupal_site_env "${site}" "SITE_URL")
     local host=$(drupal_site_env "${site}" "SOLR_HOST")
     local port=$(drupal_site_env "${site}" "SOLR_PORT")
+
+    if ! drush pm-list --pipe --type=module --status=enabled --no-core | grep -q islandora_defaults; then
+        echo "islandora_defaults is not installed.  Skipping configuration"
+        drush -l "${site_url}" -y config:set search_api.server.default_solr_server backend_config.connector_config.host "${host}"
+        drush -l "${site_url}" -y config:set search_api.server.default_solr_server backend_config.connector_config.port "${port}"
+        return 0
+    fi
 
     drush -l "${site_url}" -y config:set search_api.server.default_solr_server backend_config.connector_config.host "${host}"
     drush -l "${site_url}" -y config:set search_api.server.default_solr_server backend_config.connector_config.port "${port}"
