@@ -30,6 +30,7 @@ RUN --mount=type=cache,id=hypercube-apk,sharing=locked,from=cache,target=/var/ca
     cleanup.sh
 
 ENV HYPERCUBE_LOG_LEVEL=info
+    HYPERCUBE_FCREPO_URL=fcrepo/fcrepo/rest \
 
 COPY --from=crayfish /etc/nginx/http.d/default.conf /etc/nginx/http.d/default.conf
 COPY --from=crayfish --chown=nginx:nginx /var/www /var/www
