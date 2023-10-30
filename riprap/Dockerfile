@@ -13,7 +13,7 @@ WORKDIR /var/www/riprap
 
 # Platform specific does require arch specific identifier.
 RUN --mount=type=cache,id=riprap-apk-${TARGETARCH},sharing=locked,target=/var/cache/apk \
-    apk add php81-pdo_sqlite && \
+    apk add php82-pdo_sqlite && \
     cleanup.sh
 
 # Platform agnostic does not require arch specific identifier.
