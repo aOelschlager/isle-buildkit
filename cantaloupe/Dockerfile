@@ -37,9 +37,21 @@ RUN --mount=type=cache,id=cantaloupe-apk-${TARGETARCH},sharing=locked,target=/va
         ffmpeg \
         openjpeg-tools \
         libjpeg-turbo \
+        lcms2-dev \
+        libpng-dev \
+        zstd-dev \
+        tiff-dev \
+        jpeg-dev \
+        zlib-dev \
+        libwebp-dev \
+        gcc g++ cmake exiftool \
     && \
     mkdir -p /opt/libjpeg-turbo/lib && \
     ln -s /usr/lib/libturbojpeg.so.0 /opt/libjpeg-turbo/lib/libturbojpeg.so && \
+    git clone https://github.com/GrokImageCompression/grok && \
+    cd grok && \
+    cmake . && \
+    make install && \
     create-service-user.sh --name cantaloupe --group jwt /data /opt/cantaloupe/logs && \
     cleanup.sh
 
@@ -223,7 +235,7 @@ ENV \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_FALLBACK="Java2dProcessor" \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_FLV="FfmpegProcessor" \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_GIF="Java2dProcessor" \
-    CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_JP2="OpenJpegProcessor" \
+    CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_JP2="GrokProcessor" \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_JPG="TurboJpegProcessor" \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_MOV="FfmpegProcessor" \
     CANTALOUPE_PROCESSOR_MANUALSELECTIONSTRATEGY_MP4="FfmpegProcessor" \
